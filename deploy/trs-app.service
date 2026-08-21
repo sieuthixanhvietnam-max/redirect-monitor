@@ -12,6 +12,10 @@ Type=simple
 User=app-trs
 Group=app-trs
 WorkingDirectory=/var/www/redirect-monitor/main-app
+# ProtectSystem=strict khoa thu muc code -> Python khong ghi duoc __pycache__.
+# Tat han cho ro rang thay vi de no that bai am tham moi lan khoi dong.
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=/var/www/redirect-monitor/main-app/.env
 ExecStart=/var/www/redirect-monitor/main-app/venv/bin/uvicorn \
     app.main:app \
