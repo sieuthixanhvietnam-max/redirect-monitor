@@ -1,4 +1,7 @@
 import Fastify from 'fastify';
+// Cung ly do nhu trong lib/fetcher.js: fetch va ProxyAgent phai den tu cung mot
+// ban undici, neu khong Node se tu choi dispatcher.
+import { fetch } from 'undici';
 import { fetchChain } from './lib/fetcher.js';
 import { fetchWithBrowser, browserAvailable, closeBrowser } from './lib/browser.js';
 import {

@@ -1,4 +1,13 @@
 import dns from 'node:dns/promises';
+// Phai lay fetch tu chinh goi undici, KHONG dung fetch toan cuc cua Node.
+// fetch toan cuc chay bang ban undici NHUNG DINH KEM trong Node, con ProxyAgent
+// o duoi lai den tu undici cai qua npm. Hai ban khac nhau thi giao dien handler
+// noi bo cung khac nhau, va Node se tu choi dispatcher la:
+//     InvalidArgumentError: invalid onRequestStart method
+// Loi chi lo ra khi ban Node cua may chay lech ban undici trong package.json —
+// chay tot tren may dev Node 26, chet tren VPS Node 22. Lay ca hai tu cung mot
+// goi thi khong con phu thuoc vao ban Node nua.
+import { fetch } from 'undici';
 import { classifyBlock, findMetaRefresh, sniffJsRedirect } from './classify.js';
 import { httpDispatcher, DIRECT } from './proxy.js';
 
