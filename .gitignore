@@ -1,0 +1,12 @@
+node_modules/
+data/
+*.db
+*.db-wal
+*.db-shm
+.env
+__pycache__/
+*.pyc
+.venv/
+
+# Ban POC cu cua giao dien, khong dung khi trien khai.
+main-app/frontend/poc-dist/

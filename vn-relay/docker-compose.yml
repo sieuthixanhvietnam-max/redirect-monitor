@@ -1,0 +1,31 @@
+services:
+  relay:
+    build:
+      context: .
+      # Doi thanh Dockerfile.slim neu may yeu / khong can browser mode
+      dockerfile: Dockerfile
+    container_name: vn-relay
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      # CHI mo ra localhost neu ban dung Cloudflare Tunnel.
+      # Neu la VPS co public IP va ban dat sau Caddy/Nginx, cung giu 127.0.0.1.
+      # Chi doi thanh "0.0.0.0:8787:8787" khi ban that su muon mo truc tiep ra internet.
+      - "127.0.0.1:8787:8787"
+    shm_size: "512mb"
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  # --- TUY CHON: Cloudflare Tunnel, dung khi may VN nam sau NAT (mang gia dinh/van phong) ---
+  # Bo comment khoi duoi va dien CLOUDFLARE_TUNNEL_TOKEN trong .env
+  #
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: vn-relay-tunnel
+  #   restart: unless-stopped
+  #   command: tunnel --no-autoupdate run
+  #   environment:
+  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+  #   depends_on:
+  #     - relay

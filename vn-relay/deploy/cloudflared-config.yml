@@ -1,0 +1,21 @@
+# Cloudflare Tunnel - dung khi may VN nam sau NAT (khong co public IP).
+#
+# Cach lam (mien phi, can 1 domain da tro nameserver ve Cloudflare):
+#   1. cloudflared tunnel login
+#   2. cloudflared tunnel create vn-relay
+#   3. Copy file nay ve ~/.cloudflared/config.yml, sua <TUNNEL_ID> va hostname
+#   4. cloudflared tunnel route dns vn-relay relay.tenmiencuaban.com
+#   5. sudo cloudflared service install     (chay 24/7 nhu systemd service)
+#
+# Sau do main-app goi toi: https://relay.tenmiencuaban.com
+
+tunnel: <TUNNEL_ID>
+credentials-file: /root/.cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  - hostname: relay.tenmiencuaban.com
+    service: http://localhost:8787
+    originRequest:
+      connectTimeout: 10s
+      noTLSVerify: true
+  - service: http_status:404

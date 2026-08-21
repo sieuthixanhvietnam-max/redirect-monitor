@@ -1,0 +1,39 @@
+# Main app (FastAPI + SQLite + scheduler + dashboard).
+# Chi nghe tren 127.0.0.1 — ra Internet phai di qua OpenLiteSpeed (vhost trs.aeseo1.com).
+# Cai: cp deploy/trs-app.service /etc/systemd/system/ && systemctl daemon-reload
+
+[Unit]
+Description=Redirect Monitor - Main App (FastAPI)
+After=network-online.target trs-relay.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=app-trs
+Group=app-trs
+WorkingDirectory=/var/www/redirect-monitor/main-app
+EnvironmentFile=/var/www/redirect-monitor/main-app/.env
+ExecStart=/var/www/redirect-monitor/main-app/venv/bin/uvicorn \
+    app.main:app \
+    --host 127.0.0.1 \
+    --port 8002 \
+    --no-access-log
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+SyslogIdentifier=trs-app
+
+# Hardening. ReadWritePaths chi mo dung thu muc data/ — code va .env van chi doc.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/redirect-monitor/main-app/data
+
+# Gioi han tai nguyen: VPS nay chay chung voi nhieu du an khac, mot app phinh RAM
+# khong duoc phep keo do ca may.
+MemoryMax=768M
+CPUQuota=80%
+
+[Install]
+WantedBy=multi-user.target

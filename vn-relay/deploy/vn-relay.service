@@ -1,0 +1,32 @@
+; Systemd unit cho VN relay chay truc tiep bang Node (khong Docker).
+; Cai: sudo cp deploy/vn-relay.service /etc/systemd/system/
+;      sudo systemctl daemon-reload && sudo systemctl enable --now vn-relay
+
+[Unit]
+Description=VN Redirect Relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=relay
+Group=relay
+WorkingDirectory=/opt/vn-relay
+EnvironmentFile=/opt/vn-relay/.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=vn-relay
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vn-relay
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

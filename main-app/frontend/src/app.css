@@ -1,0 +1,97 @@
+/* Chi nhung gi Mantine khong lo: mau trang thai dung chung va dai hoat dong. */
+
+:root {
+  --st-ok: var(--mantine-color-teal-7);
+  --st-redirect: var(--mantine-color-violet-6);
+  --st-blocked: var(--mantine-color-orange-6);
+  --st-error: var(--mantine-color-red-6);
+  --st-empty: var(--mantine-color-gray-3);
+}
+[data-mantine-color-scheme='dark'] {
+  --st-ok: var(--mantine-color-teal-5);
+  --st-redirect: var(--mantine-color-violet-4);
+  --st-blocked: var(--mantine-color-orange-5);
+  --st-error: var(--mantine-color-red-5);
+  --st-empty: var(--mantine-color-dark-5);
+}
+
+body {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── dai hoat dong ─────────────────────────────────────────────
+   Mot bo lop dung cho ca hai co: nho trong dong bang (huong A),
+   to trong hop thoai chi tiet (huong C). Chi khac chieu cao + khe. */
+.strip {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+.strip > i {
+  flex: 1 1 0;
+  min-width: 1px;
+  display: block;
+}
+.strip.sm {
+  height: 17px;
+  gap: 1px;
+  background: var(--mantine-color-default-border);
+}
+.strip.lg {
+  height: 38px;
+  gap: 2px;
+}
+.strip.lg > i {
+  border-radius: 2px;
+}
+
+.bar-ok { background: var(--st-ok); }
+.bar-redirect { background: var(--st-redirect); }
+.bar-blocked { background: var(--st-blocked); }
+.bar-error { background: var(--st-error); }
+.bar-null { background: var(--st-empty); }
+/* Gio chua theo doi = ranh rong ca chieu cao, khong phai cot cao 0 — khac nghia.
+   Chi ap dung BEN TRONG dai; o mau trong phan chu giai co chieu cao rieng. */
+.strip > i.bar-null { height: 100% !important; }
+/* Gio co loi le nhung khong chiem da so. */
+.bar-partial { box-shadow: inset 0 2px 0 var(--st-error); }
+
+/* Cham trang thai dung trong bang va chu thich. */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+
+/* Dong bang bam duoc — con tro phai noi ro dieu do. */
+.row-click { cursor: pointer; }
+
+/* Cot dau moi dong mang mot vet mau trang thai, doc luot rat nhanh. */
+.row-redirect td:first-child { box-shadow: inset 2px 0 0 var(--st-redirect); }
+.row-error td:first-child { box-shadow: inset 2px 0 0 var(--st-error); }
+.row-blocked td:first-child { box-shadow: inset 2px 0 0 var(--st-blocked); }
+
+.break-all { word-break: break-all; }
+
+/* ── duong thoi gian ───────────────────────────────────────────
+   Truc doc noi cac su kien trong cung mot ngay lai voi nhau, de mat
+   thay ngay day la mot chuoi theo thoi gian chu khong phai cac the roi. */
+.tl-item { position: relative; padding-left: 30px; }
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: 5px; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--mantine-color-default-border);
+}
+/* Su kien cuoi cua moi ngay: truc dung lai o cham, khong cham xuong day. */
+.tl-item.tl-last::before { bottom: auto; height: 13px; }
+.tl-item > .tl-dot {
+  position: absolute;
+  left: 0; top: 7px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--mantine-color-body);
+}

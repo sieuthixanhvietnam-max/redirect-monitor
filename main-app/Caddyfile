@@ -1,0 +1,27 @@
+# Doi monitor.tenmiencuaban.com thanh domain that cua ban,
+# va tro ban ghi A cua no ve IP cua VPS nay TRUOC KHI khoi dong.
+# Caddy tu dong xin chung chi Let's Encrypt, khong can lam gi them.
+
+monitor.tenmiencuaban.com {
+	encode zstd gzip
+
+	# Chan brute-force nhe nhang
+	@api path /api/*
+	header @api Cache-Control "no-store"
+
+	reverse_proxy 127.0.0.1:8000 {
+		header_up X-Real-IP {remote_host}
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 10mb
+			roll_keep 3
+		}
+	}
+}
+
+# Neu chua co domain, dung tam khoi nay de test qua IP (khong co HTTPS):
+# :80 {
+# 	reverse_proxy 127.0.0.1:8000
+# }

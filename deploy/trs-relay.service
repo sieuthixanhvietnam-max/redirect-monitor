@@ -1,0 +1,36 @@
+# VN fetch relay (Node + Fastify).
+# Ra Internet bang IP Viet Nam qua upstream proxy khai bao trong RELAY_PROXIES.
+# KHONG mo ra ngoai: chi nghe 127.0.0.1, chi main-app goi toi.
+# Cai: cp deploy/trs-relay.service /etc/systemd/system/ && systemctl daemon-reload
+
+[Unit]
+Description=Redirect Monitor - VN Relay (Node/Fastify)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=app-trs
+Group=app-trs
+WorkingDirectory=/var/www/redirect-monitor/vn-relay
+EnvironmentFile=/var/www/redirect-monitor/vn-relay/.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+SyslogIdentifier=trs-relay
+
+# Hardening. Chromium can ghi vao /tmp (da co PrivateTmp) va vao thu muc cache
+# cua playwright — nen mo ReadWritePaths cho .cache.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/redirect-monitor/vn-relay/.cache
+
+# Chromium an RAM. Gioi han de mot lan quet bat thuong khong lam nghen VPS.
+MemoryMax=1G
+CPUQuota=80%
+
+[Install]
+WantedBy=multi-user.target
