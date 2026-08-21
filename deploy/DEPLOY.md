@@ -174,8 +174,28 @@ KEY=$(grep ^RELAY_API_KEY= /var/www/redirect-monitor/vn-relay/.env | cut -d= -f2
 curl -H "x-api-key: $KEY" http://127.0.0.1:8003/health
 curl -H "x-api-key: $KEY" http://127.0.0.1:8003/egress-ip   # phai la country VN
 
-curl -u admin:<mat khau> https://trs.aeseo1.com/api/health
+curl https://trs.aeseo1.com/api/health
 ```
+
+## Dang nhap: DANG TAT
+
+`DASHBOARD_PASSWORD` de trong trong `main-app/.env` — theo `require_auth` trong
+`app/main.py`, de trong nghia la **tat han xac thuc**.
+
+Hau qua can biet: khong chi trang xem bi mo, ma **ca API ghi** cung mo. Bat ky ai
+biet dia chi deu co the `POST /api/domains` va `DELETE /api/domains/{id}`.
+
+Muon bat lai:
+
+```bash
+# Sinh mat khau moi roi dien vao main-app/.env
+openssl rand -base64 24 | tr -d '/+=' | head -c 28
+systemctl restart trs-app
+```
+
+Muon van mo nhung chan bot nguoi la, chon mot trong:
+- Cloudflare Access (dat truoc domain, dang nhap bang email/Google)
+- Chan theo IP ngay trong vhost OLS (`accessControl { allow <IP cua ban>; deny * }`)
 
 Tren dashboard, tab **Relay VN** phai luon hien `VN`. Chuyen mau do hoac ra ma
 nuoc khac thi moi ket qua ve site chan theo vung deu khong dang tin.
